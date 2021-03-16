@@ -1,0 +1,19 @@
+.container {
+    width: 100%;
+    height: 100%;
+    background-color: slategrey;
+
+    display: grid;
+    place-content: center;
+}
+
+.heading {
+    color: antiquewhite;
+    margin-bottom: 1.5rem;
+}
+
+.icons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
