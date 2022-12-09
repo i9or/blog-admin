@@ -1,6 +1,7 @@
 import { ReactIcon } from "~/assets";
 
 import styles from "./App.module.css";
+import {Counter} from "~/components/Counter";
 
 export const App = () => (
   <div className={styles.container}>
@@ -13,5 +14,6 @@ export const App = () => (
         <img src={ReactIcon} className="logo react" alt="React logo" />
       </a>
     </section>
+    <Counter />
   </div>
 );
