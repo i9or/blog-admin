@@ -1,15 +1,28 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import { store } from "~/state/store";
 import { App } from "./components/App";
 import "./styles/global.css";
+import { BrowserRouter } from "react-router-dom";
+import { AuthenticationProvider } from "~/contexts/AuthenticationContext/AuthenticationContext";
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <AuthenticationProvider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+        <ReactQueryDevtools
+          position="top-right"
+          panelPosition="right"
+          initialIsOpen={false}
+        />
+      </QueryClientProvider>
+    </AuthenticationProvider>
   </React.StrictMode>
 );

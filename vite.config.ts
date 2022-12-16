@@ -12,8 +12,6 @@ export default defineConfig({
       "~": path.resolve(__dirname, "./src"),
     },
   },
-  // TODO: remove once https://github.com/vitest-dev/vitest/issues/2474 resolved
-  // @ts-ignore
   test: {
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",
