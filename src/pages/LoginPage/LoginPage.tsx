@@ -1,8 +1,15 @@
-import { FaLock, FaExclamationTriangle } from "react-icons/all";
+import { FaLock, FaSpinner, FaExclamationTriangle } from "react-icons/all";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { clsx } from "clsx";
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
+
+import { castlePng } from "~/assets";
+import { tryToLogin } from "~/api/authentication";
+import { useAuth } from "~/contexts/AuthenticationContext";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "~/components/Routes";
+import { toFromPath } from "~/utilities/routing";
 
 type LoginForm = {
   login: string;
@@ -10,6 +17,9 @@ type LoginForm = {
 };
 
 export const LoginPage = () => {
+  const { setIsAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
   const {
     mutate,
     isLoading,
@@ -17,15 +27,13 @@ export const LoginPage = () => {
     reset: resetMutation,
   } = useMutation({
     mutationFn: ({ login, password }: LoginForm) => {
-      return new Promise((resolve, reject) =>
-        setTimeout(
-          () => reject({ login, password, status: "Great success!" }),
-          2000
-        )
-      );
+      return tryToLogin(login, password);
     },
-    onSuccess: (data) => {
-      console.log("Great success!", data);
+    onSuccess: ({ data }) => {
+      if (data.status === "success") {
+        setIsAuthenticated(true);
+        navigate(toFromPath(ROUTES.home.path), { replace: true });
+      }
     },
   });
 
@@ -49,17 +57,12 @@ export const LoginPage = () => {
     reset(undefined, {
       keepValues: true,
     });
-    console.log(data);
   };
 
   return (
     <section className="grid h-full w-full place-content-center bg-gray-900">
       <div className="border-red flex flex-row overflow-hidden rounded-xl">
-        <img
-          className="w-96"
-          src="/55978_landscapewithjapanesecastledarkautumnhighwallsgoth.png"
-          alt="Dark Japanese castle"
-        />
+        <img className="w-96" src={castlePng} alt="Dark Japanese castle" />
         <form
           className="relative flex w-96 flex-col justify-center gap-6 bg-gray-800 px-12 text-gray-200"
           onSubmit={handleSubmit(submitHandler)}
@@ -71,7 +74,11 @@ export const LoginPage = () => {
             </div>
           ) : null}
           <div className="mb-8 flex justify-center">
-            <FaLock size={60} />
+            {isLoading ? (
+              <FaSpinner size={60} className="animate-spin" />
+            ) : (
+              <FaLock size={60} />
+            )}
           </div>
           <h1 className="mb-4 self-center text-3xl">Greetings, my liege!</h1>
           <input

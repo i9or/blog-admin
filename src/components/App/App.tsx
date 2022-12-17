@@ -16,7 +16,6 @@ export const App = () => {
           element={ROUTES.analytics.element}
         />
         <Route path={ROUTES.user.path} element={ROUTES.user.element} />
-        <Route path={ROUTES.logout.path} element={ROUTES.logout.element} />
         <Route path="*" element={<NoMatch />} />
       </Route>
       <Route path={ROUTES.login.path} element={ROUTES.login.element} />

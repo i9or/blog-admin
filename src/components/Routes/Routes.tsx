@@ -1,11 +1,12 @@
-import {ReactNode} from "react";
-import {Home} from "~/pages/HomePage/HomePage";
-import {LoginPage} from "~/pages/LoginPage/LoginPage";
+import { ReactNode } from "react";
+import { HomePage } from "~/pages/HomePage";
+import { LoginPage } from "~/pages/LoginPage";
 
 type RouteDetails = {
   path: string;
   element: ReactNode;
 };
+
 type RoutesMap<T extends string> = {
   readonly [k in T]: Readonly<RouteDetails>;
 };
@@ -17,7 +18,7 @@ function defineRoutes<T extends string>(m: RoutesMap<T>) {
 export const ROUTES = defineRoutes({
   home: {
     path: "",
-    element: <Home/>,
+    element: <HomePage />,
   },
   newPost: {
     path: "new-post",
@@ -37,10 +38,6 @@ export const ROUTES = defineRoutes({
   },
   login: {
     path: "login",
-    element: <LoginPage/>,
-  },
-  logout: {
-    path: "logout",
-    element: <h1>Logout</h1>,
+    element: <LoginPage />,
   },
 });

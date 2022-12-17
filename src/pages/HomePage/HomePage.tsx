@@ -10,7 +10,7 @@ type PokemonData = {
   sprites: Sprites;
 };
 
-export const Home = () => {
+export const HomePage = () => {
   const { isLoading, isError, data } = useQuery({
     queryKey: ["pokemonData"],
     queryFn: async () => {
