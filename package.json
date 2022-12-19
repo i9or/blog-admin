@@ -1,7 +1,7 @@
 {
   "name": "blog-admin",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Yet another blog admin panel",
   "main": "server/server.mjs",
   "engines": {
@@ -92,8 +92,10 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "files": [
+    "dist/**",
     "dist/*/**",
     "npm-shrinkwrap.json",
+    "server/**",
     "server/*/**",
     "env.mjs"
   ]
