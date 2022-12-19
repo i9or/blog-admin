@@ -4,4 +4,5 @@
  */
 export const APP_ENV = {
   API_HOST: process.env.API_HOST,
+  ADMIN_PORT: process.env.ADMIN_PORT,
 };

@@ -13,6 +13,7 @@ export default defineConfig({
       input: "./src/main.tsx",
     },
   },
+  base: "/public",
   resolve: {
     alias: {
       "~": path.resolve(__dirname, "./src"),

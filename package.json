@@ -3,14 +3,19 @@
   "private": true,
   "version": "0.0.1",
   "description": "Yet another blog admin panel",
-  "main": "dist/index.js",
+  "main": "server/server.mjs",
+  "engines": {
+    "node": ">=18.12.1 <19",
+    "npm": ">=8 <10"
+  },
   "scripts": {
+    "start": "node server/server.mjs",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "watch:server": "nodemon ./server.mjs | pino-pretty -S",
+    "watch:server": "nodemon server/server.mjs | pino-pretty -S",
     "watch:client": "vite",
     "watch": "concurrently -n \"SERVER,CLIENT\" -c \"yellow,blue\" \"npm:watch:server\" \"npm:watch:client\"",
-    "build": "tsc && vite build",
+    "build": "del ./dist && cross-env NODE_ENV=production tsc && vite build",
     "preview": "vite preview",
     "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\""
   },
@@ -44,6 +49,7 @@
     "clsx": "1.2.1",
     "concurrently": "7.6.0",
     "cross-env": "7.0.3",
+    "del-cli": "5.0.0",
     "husky": "8.0.2",
     "jsdom": "20.0.3",
     "lint-staged": "13.1.0",
@@ -84,5 +90,10 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
-  }
+  },
+  "files": [
+    "dist/*/**",
+    "npm-shrinkwrap.json",
+    "server/*/**"
+  ]
 }
