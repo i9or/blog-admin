@@ -3,11 +3,22 @@ import { Route, Routes } from "react-router-dom";
 import { ROUTES } from "~/components/Routes";
 import { NoMatch } from "~/components/NoMatch";
 import { Layout } from "~/components/Layout";
+import { useHttpInterceptors } from "~/hooks/useHttpInterceptors";
+import { NeedsAuthentication } from "~/components/NeedsAuthentication";
 
 export const App = () => {
+  useHttpInterceptors();
+
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route
+        path="/"
+        element={
+          <NeedsAuthentication>
+            <Layout />
+          </NeedsAuthentication>
+        }
+      >
         <Route index element={ROUTES.home.element} />
         <Route path={ROUTES.newPost.path} element={ROUTES.newPost.element} />
         <Route path={ROUTES.editNow.path} element={ROUTES.editNow.element} />

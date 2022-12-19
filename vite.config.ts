@@ -13,6 +13,7 @@ export default defineConfig({
       input: "./src/main.tsx",
     },
   },
+  base: "/public",
   resolve: {
     alias: {
       "~": path.resolve(__dirname, "./src"),
@@ -25,5 +26,6 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",
+    globals: true,
   },
 });

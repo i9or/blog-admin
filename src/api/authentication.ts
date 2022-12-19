@@ -1,3 +1,4 @@
+import axios from "axios";
 import { http } from "~/utilities/http";
 import { CLIENT_ENV } from "~/utilities/configuration";
 
@@ -7,14 +8,24 @@ type LoginResponse = {
 };
 
 export const tryToLogin = (login: string, password: string) => {
-  return http.post<LoginResponse>("/api/v1/ministry/break-in", {
-    login,
-    password,
-  });
+  // NOTE: this call should not redirect if failed,
+  // thus using a separate instance of axios
+  return axios.post<LoginResponse>(
+    `${CLIENT_ENV.API_HOST}/api/v1/ministry/break-in`,
+    {
+      login,
+      password,
+    },
+    { withCredentials: true }
+  );
 };
 
 export const logout = () => {
-  return http.delete("/api/v1/ministry/decamp");
+  // NOTE: this call should not redirect if failed,
+  // thus using a separate instance of axios
+  return axios.delete(`${CLIENT_ENV.API_HOST}/api/v1/ministry/decamp`, {
+    withCredentials: true,
+  });
 };
 
 export const refresh = () => {

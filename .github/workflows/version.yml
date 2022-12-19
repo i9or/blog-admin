@@ -1,0 +1,23 @@
+name: Version
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+      - name: Compare PR version and latest release version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_VERSION="v$(npm pkg get version | xargs)"
+          LATEST_RELEASE_VERSION=$(gh release view --json tagName -q '.tagName')
+          [[ "$PR_VERSION" != "$LATEST_RELEASE_VERSION" ]] && exit 0
