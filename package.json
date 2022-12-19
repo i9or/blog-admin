@@ -1,7 +1,7 @@
 {
   "name": "blog-admin",
   "private": true,
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Yet another blog admin panel",
   "main": "server/server.mjs",
   "engines": {
@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "node server/server.mjs",
+    "start:https": "cross-env SECURE_SERVER=true node server/server.mjs",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "watch:server": "nodemon server/server.mjs | pino-pretty -S",

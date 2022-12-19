@@ -30,9 +30,14 @@ export const LoginPage = () => {
       return tryToLogin(login, password);
     },
     onSuccess: ({ data }) => {
+      setIsAuthenticated(true);
+
       if (data.status === "success") {
-        setIsAuthenticated(true);
         navigate(toFromPath(ROUTES.home.path), { replace: true });
+      }
+
+      if (data.status === "initial") {
+        navigate(toFromPath(ROUTES.user.path), { replace: true });
       }
     },
   });
