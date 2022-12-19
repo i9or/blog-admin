@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "node server/server.mjs",
+    "start:https": "cross-env SECURE_SERVER=true node server/server.mjs",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "watch:server": "nodemon server/server.mjs | pino-pretty -S",

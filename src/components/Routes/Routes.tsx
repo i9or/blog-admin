@@ -26,7 +26,7 @@ export const ROUTES = defineRoutes({
   },
   editNow: {
     path: "edit-now",
-    element: <h1>Edit Now</h1>,
+    element: <h1>Edit Now!</h1>,
   },
   analytics: {
     path: "analytics",

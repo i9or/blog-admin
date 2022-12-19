@@ -1,14 +1,10 @@
-import { Outlet, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
+import { FaChartBar, FaFile, FaHome, FaRegUser } from "react-icons/fa";
+
 import { SidebarLink } from "~/components/SidebarLink";
 import { toFromPath } from "~/utilities/routing";
 import { ROUTES } from "~/components/Routes";
-import { FaChartBar, FaFile, FaHome, FaRegUser } from "react-icons/fa";
-import { useAuth } from "~/contexts/AuthenticationContext";
 import { LogoutButton } from "~/components/LogoutButton";
-import { useMutation } from "@tanstack/react-query";
-import { refresh } from "~/api/authentication";
-import { FaLock, FaSpinner } from "react-icons/all";
 
 export const Layout = () => (
   <section className="flex h-full w-full flex-row bg-gray-700">
