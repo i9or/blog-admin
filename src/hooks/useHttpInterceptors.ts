@@ -11,7 +11,6 @@ export const useHttpInterceptors = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("ONCE");
     http.interceptors.response.use(
       (response) => response,
       (error) => {
