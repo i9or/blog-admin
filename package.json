@@ -94,6 +94,7 @@
   "files": [
     "dist/*/**",
     "npm-shrinkwrap.json",
-    "server/*/**"
+    "server/*/**",
+    "env.mjs"
   ]
 }
