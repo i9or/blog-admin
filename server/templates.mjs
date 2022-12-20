@@ -45,17 +45,20 @@ const DevelopmentScripts = () => {
   return isProduction()
     ? ""
     : html`<script type="module">
-          import RefreshRuntime from "http://localhost:3500/@react-refresh";
+          import RefreshRuntime from "http://localhost:3500/public/@react-refresh";
           RefreshRuntime.injectIntoGlobalHook(window);
           window.$RefreshReg$ = () => {};
           window.$RefreshSig$ = () => (type) => type;
           window.__vite_plugin_react_preamble_installed__ = true;
         </script>
 
-        <script type="module" src="http://localhost:3500/@vite/client"></script>
         <script
           type="module"
-          src="http://localhost:3500/src/main.tsx"
+          src="http://localhost:3500/public/@vite/client"
+        ></script>
+        <script
+          type="module"
+          src="http://localhost:3500/public/src/main.tsx"
         ></script>`;
 };
 
