@@ -14,12 +14,14 @@ export const Layout = () => (
           <SidebarLink
             to={toFromPath(ROUTES.home.path)}
             icon={<FaHome size="28" />}
+            title="Home"
           />
         </li>
         <li>
           <SidebarLink
             to={toFromPath(ROUTES.newPost.path)}
             icon={<FaFile size="24" />}
+            title="New post"
           />
         </li>
         <li>
@@ -27,18 +29,21 @@ export const Layout = () => (
             to={toFromPath(ROUTES.editNow.path)}
             icon={"Now!"}
             cursive
+            title="Edit Now!"
           />
         </li>
         <li>
           <SidebarLink
             to={toFromPath(ROUTES.analytics.path)}
             icon={<FaChartBar size="24" />}
+            title="Analytics"
           />
         </li>
         <li className="mt-auto">
           <SidebarLink
             to={toFromPath(ROUTES.user.path)}
             icon={<FaRegUser size="24" />}
+            title="User settings"
           />
         </li>
         <li>
@@ -47,7 +52,7 @@ export const Layout = () => (
       </ul>
     </nav>
     <div className="h-full w-full overflow-y-auto">
-      <main className="container mx-auto border border-teal-200 text-white">
+      <main className="container mx-auto">
         <Outlet />
       </main>
     </div>

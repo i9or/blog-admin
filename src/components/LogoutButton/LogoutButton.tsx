@@ -30,6 +30,7 @@ export const LogoutButton = () => {
     <button
       className="relative mx-auto mt-2 mb-2 flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl bg-gray-800 text-green-500 shadow-lg hover:bg-green-600 hover:text-white"
       onClick={clickHandler}
+      title="Decamp!"
     >
       <FaSignOutAlt size="24" />
     </button>
