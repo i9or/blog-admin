@@ -1,17 +1,11 @@
+import { useMutation } from "@tanstack/react-query";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { clsx } from "clsx";
+import { FaSpinner } from "react-icons/all";
 
 import { useToaster } from "~/contexts/ToasterContext";
 import { useAuth } from "~/contexts/AuthenticationContext";
-import type { Toast } from "~/contexts/ToasterContext/ToasterContext";
-
-const statuses: Array<Toast["status"]> = [
-  "success",
-  "warning",
-  "error",
-  "info",
-];
-const getRandomStatus = () =>
-  statuses[Math.floor(Math.random() * statuses.length)];
+import { tryUpdate } from "~/api/authentication";
 
 type UserForm = {
   userName: string;
@@ -20,6 +14,7 @@ type UserForm = {
   confirmPassword: string;
 };
 
+// TODO: extract input with label as a separate component
 export const UserPage = () => {
   const { userName } = useAuth();
   const { addToast } = useToaster();
@@ -28,11 +23,36 @@ export const UserPage = () => {
     handleSubmit,
     register,
     getValues,
-    formState: { isValid },
-  } = useForm<UserForm>();
+    formState: { isValid, isSubmitted, errors: formErrors },
+    reset: resetForm,
+  } = useForm<UserForm>({
+    defaultValues: {
+      userName,
+    },
+  });
+
+  const { isLoading, mutate } = useMutation({
+    mutationFn: ({ userName, currentPassword, newPassword }: UserForm) => {
+      return tryUpdate(userName, currentPassword, newPassword);
+    },
+    onSuccess: () => {
+      addToast("Credentials updated, nice!", "success");
+    },
+    onError: () => {
+      addToast("Credentials update failed successfully!", "error");
+    },
+    onSettled: () => {
+      resetForm({
+        userName: getValues("userName"),
+        confirmPassword: "",
+        newPassword: "",
+        currentPassword: "",
+      });
+    },
+  });
 
   const submitHandler: SubmitHandler<UserForm> = (data) => {
-    addToast(JSON.stringify(data), getRandomStatus());
+    mutate(data);
   };
 
   return (
@@ -42,59 +62,122 @@ export const UserPage = () => {
         className="flex flex-col items-start"
         onSubmit={handleSubmit(submitHandler)}
       >
-        <label className="mb-2 text-sm" htmlFor="username">
-          Username
-          <span className="mx-0.5 text-rose-500">*</span>
+        <label className="relative mb-4 flex flex-col">
+          <span className="mb-2 text-sm">
+            User name
+            <span className="mx-0.5 text-rose-500">*</span>
+          </span>
+          <div className="relative">
+            <input
+              {...register("userName", { required: true })}
+              className={clsx(
+                "h-10 w-80 rounded border bg-gray-800 p-3",
+                formErrors.userName ? "border-rose-500" : "border-gray-500"
+              )}
+              autoComplete="username"
+            />
+            {formErrors.userName ? (
+              <div className="absolute top-0 left-80 ml-2 flex h-10 items-center justify-center whitespace-nowrap p-1 text-sm text-rose-400">
+                {formErrors.userName.type === "required" ? "Empty!" : null}
+              </div>
+            ) : null}
+          </div>
         </label>
-        <input
-          {...register("userName", { required: true, value: userName })}
-          className="mb-4 h-10 w-80 rounded border border-gray-500 bg-gray-800 p-3"
-          type="text"
-          id="username"
-          autoComplete="username"
-        />
-        <label className="mb-2 text-sm" htmlFor="currentPassword">
-          Current password
-          <span className="mx-0.5 text-rose-500">*</span>
+        <label className="relative mb-4 flex flex-col">
+          <span className="mb-2 text-sm">
+            Current password
+            <span className="mx-0.5 text-rose-500">*</span>
+          </span>
+          <div className="relative">
+            <input
+              {...register("currentPassword", { required: true })}
+              className={clsx(
+                "h-10 w-80 rounded border bg-gray-800 p-3",
+                formErrors.currentPassword
+                  ? "border-rose-500"
+                  : "border-gray-500"
+              )}
+              type="password"
+              autoComplete="current-password"
+            />
+            {formErrors.currentPassword ? (
+              <div className="absolute top-0 left-80 ml-2 flex h-10 items-center justify-center whitespace-nowrap p-1 text-sm text-rose-400">
+                {formErrors.currentPassword.type === "required"
+                  ? "Empty!"
+                  : null}
+              </div>
+            ) : null}
+          </div>
         </label>
-        <input
-          {...register("currentPassword", { required: true })}
-          className="mb-4 h-10 w-80 rounded border border-gray-500 bg-gray-800 p-3"
-          type="password"
-          id="currentPassword"
-          autoComplete="current-password"
-        />
-        <label className="mb-2 text-sm" htmlFor="newPassword">
-          New password
-          <span className="mx-0.5 text-rose-500">*</span>
+        <label className="relative mb-4 flex flex-col">
+          <span className="mb-2 text-sm">
+            New password
+            <span className="mx-0.5 text-rose-500">*</span>
+          </span>
+          <div className="relative">
+            <input
+              {...register("newPassword", { required: true, minLength: 8 })}
+              className={clsx(
+                "h-10 w-80 rounded border bg-gray-800 p-3",
+                formErrors.newPassword ? "border-rose-500" : "border-gray-500"
+              )}
+              type="password"
+              autoComplete="new-password"
+            />
+            {formErrors.newPassword ? (
+              <div className="absolute top-0 left-80 ml-2 flex h-10 items-center justify-center whitespace-nowrap p-1 text-sm text-rose-400">
+                {formErrors.newPassword.type === "required" ? "Empty!" : null}
+                {formErrors.newPassword.type === "minLength"
+                  ? "Too short!"
+                  : null}
+              </div>
+            ) : null}
+          </div>
         </label>
-        <input
-          {...register("newPassword", { required: true })}
-          className="mb-4 h-10 w-80 rounded border border-gray-500 bg-gray-800 p-3"
-          type="password"
-          id="newPassword"
-          autoComplete="new-password"
-        />
-        <label className="mb-2 text-sm" htmlFor="confirmNewPassword">
-          Confirm new password
-          <span className="mx-0.5 text-rose-500">*</span>
+        <label className="relative mb-4 flex flex-col">
+          <span className="mb-2 text-sm">
+            Confirm new password
+            <span className="mx-0.5 text-rose-500">*</span>
+          </span>
+          <div className="relative">
+            <input
+              {...register("confirmPassword", {
+                required: true,
+                validate: {
+                  match: (value) => value === getValues().newPassword,
+                },
+              })}
+              className={clsx(
+                "h-10 w-80 rounded border bg-gray-800 p-3",
+                formErrors.confirmPassword
+                  ? "border-rose-500"
+                  : "border-gray-500"
+              )}
+              type="password"
+              autoComplete="new-password"
+            />
+            {formErrors.confirmPassword ? (
+              <div className="absolute top-0 left-80 ml-2 flex h-10 items-center justify-center whitespace-nowrap p-1 text-sm text-rose-400">
+                {formErrors.confirmPassword.type === "match"
+                  ? "Don't match!"
+                  : null}
+                {formErrors.confirmPassword.type === "required"
+                  ? "Empty!"
+                  : null}
+              </div>
+            ) : null}
+          </div>
         </label>
-        <input
-          {...register("confirmPassword", {
-            required: true,
-            validate: (value) => value === getValues().newPassword,
-          })}
-          className="mb-8 h-10 w-80 rounded border border-gray-500 bg-gray-800 p-3"
-          type="password"
-          id="confirmNewPassword"
-          autoComplete="new-password"
-        />
         <button
           type="submit"
-          className="h-10 w-28 rounded bg-gradient-to-b from-green-500 to-green-700 text-white hover:from-green-400 hover:to-green-600 disabled:cursor-not-allowed disabled:from-gray-500 disabled:to-gray-600 disabled:text-gray-400"
-          disabled={!isValid}
+          className="mt-5 flex h-10 w-28 items-center justify-center rounded bg-gradient-to-b from-green-500 to-green-700 text-white hover:from-green-400 hover:to-green-600 disabled:cursor-not-allowed disabled:from-gray-500 disabled:to-gray-600 disabled:text-gray-400"
+          disabled={isLoading || (isSubmitted && !isValid)}
         >
-          Update
+          {isLoading ? (
+            <FaSpinner size={22} className="animate-spin" />
+          ) : (
+            "Update"
+          )}
         </button>
       </form>
     </section>
