@@ -3,21 +3,21 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
-import { logout } from "~/api/authentication";
+import { tryLogout } from "~/api/authentication";
 import { useAuth } from "~/contexts/AuthenticationContext";
 import { ROUTES } from "~/components/Routes";
 import { toFromPath } from "~/utilities/routing";
 
 export const LogoutButton = () => {
   const navigate = useNavigate();
-  const { setIsAuthenticated } = useAuth();
+  const { logout } = useAuth();
 
   const { mutate } = useMutation({
     mutationFn: () => {
-      return logout();
+      return tryLogout();
     },
     onSettled: () => {
-      setIsAuthenticated(false);
+      logout();
       navigate(toFromPath(ROUTES.login.path), { replace: true });
     },
   });

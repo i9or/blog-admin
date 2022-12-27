@@ -7,7 +7,7 @@ import { ROUTES } from "~/components/Routes";
 import { http } from "~/utilities/http";
 
 export const useHttpInterceptors = () => {
-  const { setIsAuthenticated } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export const useHttpInterceptors = () => {
       (response) => response,
       (error) => {
         if (error.response.status === 401) {
-          setIsAuthenticated(false);
+          logout();
           navigate(toFromPath(ROUTES.login.path));
         }
 

@@ -4,17 +4,24 @@ import {
   FC,
   PropsWithChildren,
   SetStateAction,
+  useCallback,
   useState,
 } from "react";
 
+import { noop } from "~/utilities/common";
+
 type AuthenticationState = {
   isAuthenticated: boolean;
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
+  userName: string | undefined;
+  login: (username: string) => void;
+  logout: () => void;
 };
 
 const initialState: AuthenticationState = {
   isAuthenticated: false,
-  setIsAuthenticated: () => {},
+  userName: undefined,
+  login: noop,
+  logout: noop,
 };
 
 export const AuthenticationContext =
@@ -24,12 +31,28 @@ export const AuthenticationProvider: FC<PropsWithChildren> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     initialState.isAuthenticated
   );
+  const [userName, setUserName] = useState(initialState.userName);
+
+  const login = useCallback(
+    (username: string) => {
+      setIsAuthenticated(true);
+      setUserName(username);
+    },
+    [setIsAuthenticated, setUserName]
+  );
+
+  const logout = useCallback(() => {
+    setIsAuthenticated(false);
+    setUserName(undefined);
+  }, [setIsAuthenticated, setUserName]);
 
   return (
     <AuthenticationContext.Provider
       value={{
         isAuthenticated,
-        setIsAuthenticated,
+        userName,
+        login,
+        logout,
       }}
     >
       {children}

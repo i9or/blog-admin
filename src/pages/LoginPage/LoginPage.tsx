@@ -17,7 +17,7 @@ type LoginForm = {
 };
 
 export const LoginPage = () => {
-  const { setIsAuthenticated } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const {
@@ -30,7 +30,7 @@ export const LoginPage = () => {
       return tryToLogin(login, password);
     },
     onSuccess: ({ data }) => {
-      setIsAuthenticated(true);
+      login(data.userName);
 
       if (data.status === "success") {
         navigate(toFromPath(ROUTES.home.path), { replace: true });
@@ -45,7 +45,7 @@ export const LoginPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors: formErrors, isValid, isDirty },
+    formState: { errors: formErrors, isValid },
     reset,
     watch,
   } = useForm<LoginForm>();
@@ -96,6 +96,7 @@ export const LoginPage = () => {
             type="text"
             placeholder="Login"
             disabled={isLoading}
+            autoComplete="username"
           />
           <input
             {...register("password", { required: true })}
@@ -107,6 +108,7 @@ export const LoginPage = () => {
             type="password"
             placeholder="Password"
             disabled={isLoading}
+            autoComplete="current-password"
           />
           <button
             className="h-10 rounded bg-gradient-to-b from-green-500 to-green-700 text-white hover:from-green-400 hover:to-green-600 disabled:cursor-not-allowed disabled:from-gray-500 disabled:to-gray-600 disabled:text-gray-400"

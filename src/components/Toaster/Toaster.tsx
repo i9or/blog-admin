@@ -9,7 +9,7 @@ export const Toaster = () => {
       {toasts.map((toast) => (
         <Toast
           id={toast.id}
-          text={`${toast.text}_${toast.id}`}
+          text={`${toast.text}`}
           status={toast.status}
           key={toast.id}
         />
