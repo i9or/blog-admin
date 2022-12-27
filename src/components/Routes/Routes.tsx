@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { HomePage } from "~/pages/HomePage";
 import { LoginPage } from "~/pages/LoginPage";
+import { UserPage } from "~/pages/UserPage";
 
 type RouteDetails = {
   path: string;
@@ -34,7 +35,7 @@ export const ROUTES = defineRoutes({
   },
   user: {
     path: "user",
-    element: <h1>User</h1>,
+    element: <UserPage />,
   },
   login: {
     path: "login",

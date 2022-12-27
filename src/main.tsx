@@ -9,22 +9,27 @@ import { App } from "./components/App";
 import "./styles/global.css";
 import { BrowserRouter } from "react-router-dom";
 import { AuthenticationProvider } from "~/contexts/AuthenticationContext";
+import { ToasterProvider } from "~/contexts/ToasterContext";
+import { Toaster } from "~/components/Toaster";
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
-    <AuthenticationProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-        <ReactQueryDevtools
-          position="top-right"
-          panelPosition="right"
-          initialIsOpen={false}
-        />
-      </QueryClientProvider>
-    </AuthenticationProvider>
+    <ToasterProvider>
+      <AuthenticationProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+          <Toaster />
+          <ReactQueryDevtools
+            position="top-right"
+            panelPosition="right"
+            initialIsOpen={false}
+          />
+        </QueryClientProvider>
+      </AuthenticationProvider>
+    </ToasterProvider>
   </StrictMode>
 );

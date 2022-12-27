@@ -1,5 +1,2 @@
-export {
-  AuthenticationContext,
-  AuthenticationProvider,
-} from "./AuthenticationContext";
+export { AuthenticationProvider } from "./AuthenticationContext";
 export { useAuth } from "./useAuth";

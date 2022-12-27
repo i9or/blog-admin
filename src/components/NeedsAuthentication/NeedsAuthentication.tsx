@@ -2,18 +2,18 @@ import { useMutation } from "@tanstack/react-query";
 import { FC, PropsWithChildren, useEffect } from "react";
 import { FaLock } from "react-icons/fa";
 
-import { refresh } from "~/api/authentication";
+import { tryRefresh } from "~/api/authentication";
 import { useAuth } from "~/contexts/AuthenticationContext";
 
 export const NeedsAuthentication: FC<PropsWithChildren> = ({ children }) => {
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { isAuthenticated, login } = useAuth();
 
   const { mutate, isLoading } = useMutation({
     mutationFn: () => {
-      return refresh();
+      return tryRefresh();
     },
-    onSuccess: () => {
-      setIsAuthenticated(true);
+    onSuccess: ({ data }) => {
+      login(data.userName);
     },
   });
 
